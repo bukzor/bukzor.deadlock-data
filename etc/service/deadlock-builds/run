@@ -1,0 +1,16 @@
+#!/bin/sh
+# runit service: validate-gated snapshot of the live Deadlock builds file.
+# Install: ln -s <repo>/etc/service/deadlock-builds /etc/service/deadlock-builds
+# runsvdir (root) picks it up within ~5s. Each pass drops to bukzor before
+# touching the repo, so commits carry the right identity and SSH keys.
+exec 2>&1
+REPO=/home/bukzor/repo/github.com/bukzor/bukzor.deadlock-data
+LOG=/home/bukzor/deadlock-builds-recovery/snapshotter.log
+INTERVAL=120
+
+while true; do
+    chpst -u bukzor:bukzor \
+        env HOME=/home/bukzor PATH=/usr/bin:/bin:/usr/sbin:/sbin \
+        "$REPO/snapshot.sh" >>"$LOG" 2>&1
+    sleep "$INTERVAL"
+done
