@@ -4,8 +4,8 @@
 #   restore REF    -- the version at git REF (e.g. HEAD~3, a snapshot sha)
 #
 # Refuses while Deadlock runs: its cloud sync would re-clobber the file, and the
-# file is usually locked. FORCE=1 overrides. Refuses an invalid source. Stamps
-# mtime to now so Steam treats local as newest and uploads it.
+# file is usually locked. FORCE=1 overrides. Copies via the bin/dlbuilds-cp
+# gate, then stamps mtime to now so Steam treats local as newest and uploads it.
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
@@ -21,11 +21,6 @@ if (( $# > 0 )); then
   trap 'rm "$src"' EXIT
   git -C "$REPO" show "$1:$BUILDS_REL" >"$src"
 fi
-counts="$("$PY" "$REPO/bin/dlbuilds-validate" "$src")" || {
-  log "refusing (gate failed): $counts"
-  exit 1
-}
-
-cp "$src" "$LIVE"
+"$REPO/bin/dlbuilds-cp" "$src" "$LIVE"
 touch "$LIVE"
-log "OK ($counts) -> live file. Now start Deadlock so it uploads this copy."
+log "OK. Now start Deadlock so it uploads this copy."

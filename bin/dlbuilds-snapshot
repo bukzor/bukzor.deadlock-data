@@ -1,14 +1,10 @@
 #!/bin/bash
 # One full pass: capture -> commit -> push. Run periodically by
-# etc/service/deadlock-builds. Push happens only when ahead of upstream, so a
-# failed push is retried next pass; no branch/upstream fails loudly.
+# etc/service/deadlock-builds.
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
 
 "$REPO/bin/dlbuilds-capture"
 "$REPO/bin/dlbuilds-commit"
-if [[ "$(git -C "$REPO" rev-list --count '@{upstream}..HEAD')" != 0 ]]; then
-  GIT_SSH_COMMAND="ssh -o BatchMode=yes" git -C "$REPO" push -q
-  log "pushed"
-fi
+"$REPO/bin/dlbuilds-push"

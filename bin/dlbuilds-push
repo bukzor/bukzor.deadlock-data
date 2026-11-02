@@ -1,0 +1,11 @@
+#!/bin/bash
+# Push to upstream, only when ahead of it: cheap to run every pass, and a failed
+# push is retried next pass. No branch/upstream fails loudly.
+set -euo pipefail
+# shellcheck source=../lib/common.sh
+source "$(dirname "$0")/../lib/common.sh"
+
+if [[ "$(git -C "$REPO" rev-list --count '@{upstream}..HEAD')" != 0 ]]; then
+  GIT_SSH_COMMAND="ssh -o BatchMode=yes" git -C "$REPO" push -q
+  log "pushed"
+fi

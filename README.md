@@ -13,10 +13,12 @@ Each is standalone; run any of them by hand (`.envrc` puts `bin/` on PATH).
 | `dlbuilds-stat [FILE...]`   | per file: size, mtime, build counts, identical copies |
 | `dlbuilds-validate FILE`    | print `up=N fav=M`; non-zero if unparseable or empty  |
 | `dlbuilds-game-running`     | exit 0 iff the game is running                        |
-| `dlbuilds-capture`          | live save -> repo copy, if valid and changed          |
+| `dlbuilds-cp SRC DST`       | copy SRC over DST, if SRC is valid and they differ    |
+| `dlbuilds-capture`          | `dlbuilds-cp` live save -> repo copy                  |
 | `dlbuilds-commit`           | commit the repo copy, if valid and changed            |
-| `dlbuilds-snapshot`         | capture + commit + push when ahead of upstream        |
-| `dlbuilds-restore [REF]`    | repo copy (or version at REF) -> live save, if valid and game is stopped |
+| `dlbuilds-push`             | push, if ahead of upstream                            |
+| `dlbuilds-snapshot`         | capture + commit + push                               |
+| `dlbuilds-restore [REF]`    | if game is stopped: `dlbuilds-cp` repo copy (or version at REF) -> live save, then touch it |
 
 Paths live in `lib/common.sh`. `DEBUG=1` traces any step.
 
