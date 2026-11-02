@@ -5,4 +5,4 @@ set -euo pipefail
 source "$(dirname "$0")/../lib/common.sh"
 
 tasks="$(/mnt/c/Windows/System32/tasklist.exe)"
-grep -qi deadlock <<<"$tasks"
+exec grep -qi deadlock <<<"$tasks"

@@ -10,7 +10,7 @@ set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
 
-if [[ ${FORCE:-0} != 1 ]] && "$REPO/bin/is-deadlock-running"; then
+if [[ ${FORCE:-0} != 1 ]] && "$REPO/bin/dlbuilds-game-running"; then
   log "Deadlock is running. Exit it fully (tray icon -> Exit), then re-run. (FORCE=1 overrides.)"
   exit 1
 fi
@@ -19,9 +19,9 @@ src="$BUILDS"
 if (( $# > 0 )); then
   src="$(mktemp)"
   trap 'rm "$src"' EXIT
-  git -C "$REPO" show "$1:${BUILDS#"$REPO"/}" >"$src"
+  git -C "$REPO" show "$1:$BUILDS_REL" >"$src"
 fi
-counts="$("$PY" "$REPO/bin/validate" "$src")" || {
+counts="$("$PY" "$REPO/bin/dlbuilds-validate" "$src")" || {
   log "refusing (gate failed): $counts"
   exit 1
 }

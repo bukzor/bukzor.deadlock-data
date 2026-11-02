@@ -1,0 +1,24 @@
+#!/bin/bash
+# Show status of builds files (default: live save and repo copy): size, mtime,
+# build counts or why invalid, and which known copies it is byte-identical to.
+set -euo pipefail
+# shellcheck source=../lib/common.sh
+source "$(dirname "$0")/../lib/common.sh"
+
+(( $# > 0 )) || set -- "$LIVE" "$BUILDS"
+for file in "$@"; do
+  echo "$file"
+  if [[ ! -e $file ]]; then
+    echo "  missing"
+    continue
+  fi
+  echo "  size:    $(stat -c %s "$file")"
+  echo "  mtime:   $(date -r "$file" -Is)"
+  echo "  builds:  $("$PY" "$REPO/bin/dlbuilds-validate" "$file" || : 'invalid is a reportable status')"
+
+  same=()
+  if [[ ! $file -ef $LIVE ]] && cmp -s "$file" "$LIVE"; then same+=(live); fi
+  if [[ ! $file -ef $BUILDS ]] && cmp -s "$file" "$BUILDS"; then same+=(repo); fi
+  if git -C "$REPO" show "HEAD:$BUILDS_REL" | cmp -s - "$file"; then same+=(HEAD); fi
+  echo "  same as: ${same[*]:-none}"
+done

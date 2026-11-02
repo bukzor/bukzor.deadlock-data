@@ -4,7 +4,8 @@ shopt -s failglob
 export DEBUG="${DEBUG:-0}"
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BUILDS="$REPO/cached_hero_builds.kv3"
+BUILDS_REL=cached_hero_builds.kv3
+BUILDS="$REPO/$BUILDS_REL"
 LIVE="/mnt/c/Program Files (x86)/Steam/userdata/37093539/1422450/remote/cfg/cached_hero_builds.kv3"
 PY="$REPO/.venv/bin/python"
 

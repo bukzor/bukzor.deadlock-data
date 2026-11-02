@@ -1,21 +1,20 @@
 #!/bin/bash
 # Commit the repo's builds file, labeled with its build counts -- only if it
-# differs from HEAD and passes bin/validate. Commits no other paths.
+# differs from HEAD and passes bin/dlbuilds-validate. Commits no other paths.
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
 
-file="${BUILDS#"$REPO"/}"
-if git -C "$REPO" diff --quiet HEAD -- "$file"; then
+if git -C "$REPO" diff --quiet HEAD -- "$BUILDS_REL"; then
   exit 0
 fi
-counts="$("$PY" "$REPO/bin/validate" "$BUILDS")" || {
+counts="$("$PY" "$REPO/bin/dlbuilds-validate" "$BUILDS")" || {
   log "refusing (gate failed): $counts"
   exit 1
 }
 git -C "$REPO" commit -q -m "builds snapshot $(date -Is) ($counts)
 
-Validate-gated by bin/commit.
+Validate-gated by bin/dlbuilds-commit.
 
-Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>" -- "$file"
+Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>" -- "$BUILDS_REL"
 log "COMMITTED: $counts"
