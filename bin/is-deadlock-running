@@ -1,0 +1,8 @@
+#!/bin/bash
+# Exit 0 iff a Deadlock process is running on the Windows host.
+set -euo pipefail
+# shellcheck source=../lib/common.sh
+source "$(dirname "$0")/../lib/common.sh"
+
+tasks="$(/mnt/c/Windows/System32/tasklist.exe)"
+grep -qi deadlock <<<"$tasks"

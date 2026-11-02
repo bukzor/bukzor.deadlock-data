@@ -1,3 +1,4 @@
 # runit writes control/state here once the service is supervised
 etc/service/*/supervise/
 etc/service/*/log/
+trash/

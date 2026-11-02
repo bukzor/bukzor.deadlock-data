@@ -1,0 +1,20 @@
+#!/bin/bash
+# Copy the live Deadlock builds file over the repo copy -- only if it passes
+# bin/validate, so a crash-truncated/empty save never replaces a good one.
+# Silent when unchanged. Does not commit.
+set -euo pipefail
+# shellcheck source=../lib/common.sh
+source "$(dirname "$0")/../lib/common.sh"
+
+if [[ ! -f $LIVE ]]; then
+  log "SKIP: live file missing: $LIVE"
+  exit 1
+fi
+counts="$("$PY" "$REPO/bin/validate" "$LIVE")" || {
+  log "SKIP (gate failed): $counts"
+  exit 1
+}
+if ! cmp -s "$LIVE" "$BUILDS"; then
+  cp "$LIVE" "$BUILDS"
+  log "captured: $counts"
+fi

@@ -11,6 +11,6 @@ INTERVAL=120
 while true; do
     chpst -u bukzor:bukzor \
         env HOME=/home/bukzor PATH=/usr/bin:/bin:/usr/sbin:/sbin \
-        "$REPO/snapshot.sh" >>"$LOG" 2>&1
+        "$REPO/bin/snapshot" >>"$LOG" 2>&1
     sleep "$INTERVAL"
 done

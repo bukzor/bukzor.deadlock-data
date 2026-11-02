@@ -1,0 +1,31 @@
+#!/bin/bash
+# Install a builds file over the live Deadlock save.
+#   restore        -- the repo's working copy
+#   restore REF    -- the version at git REF (e.g. HEAD~3, a snapshot sha)
+#
+# Refuses while Deadlock runs: its cloud sync would re-clobber the file, and the
+# file is usually locked. FORCE=1 overrides. Refuses an invalid source. Stamps
+# mtime to now so Steam treats local as newest and uploads it.
+set -euo pipefail
+# shellcheck source=../lib/common.sh
+source "$(dirname "$0")/../lib/common.sh"
+
+if [[ ${FORCE:-0} != 1 ]] && "$REPO/bin/is-deadlock-running"; then
+  log "Deadlock is running. Exit it fully (tray icon -> Exit), then re-run. (FORCE=1 overrides.)"
+  exit 1
+fi
+
+src="$BUILDS"
+if (( $# > 0 )); then
+  src="$(mktemp)"
+  trap 'rm "$src"' EXIT
+  git -C "$REPO" show "$1:${BUILDS#"$REPO"/}" >"$src"
+fi
+counts="$("$PY" "$REPO/bin/validate" "$src")" || {
+  log "refusing (gate failed): $counts"
+  exit 1
+}
+
+cp "$src" "$LIVE"
+touch "$LIVE"
+log "OK ($counts) -> live file. Now start Deadlock so it uploads this copy."
