@@ -1,16 +1,8 @@
 #!/bin/bash
-# List the builds files -- live save and repo copy -- with size and mtime.
+# List the builds files -- live save and repo copy -- one shell-quoted path per
+# line, for: dlbuilds-ls | xargs dlbuilds-stat
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
 
-list() {
-  local label="$1" file="$2"
-  if [[ -e $file ]]; then
-    printf '%7s  %s  %s  %s\n' "$(stat -c %s "$file")" "$(date -r "$file" '+%F %R')" "$label" "$file"
-  else
-    printf '%7s  %-16s  %s  %s\n' - missing "$label" "$file"
-  fi
-}
-list live "$LIVE"
-list repo "$BUILDS"
+printf '%q\n' "$LIVE" "$BUILDS"

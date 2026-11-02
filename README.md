@@ -9,8 +9,8 @@ Each is standalone; run any of them by hand (`.envrc` puts `bin/` on PATH).
 
 | step                        | does                                                  |
 | --------------------------- | ----------------------------------------------------- |
-| `dlbuilds-ls`               | list live save and repo copy: size, mtime             |
-| `dlbuilds-stat [FILE...]`   | per file: size, mtime, build counts, identical copies |
+| `dlbuilds-ls`               | list live save and repo copy paths, one per line      |
+| `dlbuilds-stat FILE...`     | per file: size, mtime, build counts, identical copies |
 | `dlbuilds-validate FILE`    | print `up=N fav=M`; non-zero if unparseable or empty  |
 | `dlbuilds-game-running`     | exit 0 iff the game is running                        |
 | `dlbuilds-cp SRC DST`       | copy SRC over DST, if SRC is valid and they differ    |
