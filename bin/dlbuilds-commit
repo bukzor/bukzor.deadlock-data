@@ -14,7 +14,5 @@ counts="$("$PY" "$REPO/bin/dlbuilds-validate" "$BUILDS")" || {
 }
 git -C "$REPO" commit -q -m "builds snapshot $(date -Is) ($counts)
 
-Validate-gated by bin/dlbuilds-commit.
-
-Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>" -- "$BUILDS_REL"
+Validate-gated by bin/dlbuilds-commit." -- "$BUILDS_REL"
 log "COMMITTED: $counts"
