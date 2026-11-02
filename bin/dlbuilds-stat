@@ -13,7 +13,7 @@ for file in "$@"; do
   fi
   echo "  size:    $(stat -c %s "$file")"
   echo "  mtime:   $(date -r "$file" -Is)"
-  echo "  builds:  $("$PY" "$REPO/bin/dlbuilds-validate" "$file" || : 'invalid is a reportable status')"
+  echo "  builds:  $(dlbuilds-validate "$file" || : 'invalid is a reportable status')"
 
   same=()
   if [[ ! $file -ef $LIVE ]] && cmp -s "$file" "$LIVE"; then same+=(live); fi

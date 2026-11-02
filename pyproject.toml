@@ -1,9 +1,19 @@
 [project]
 name = "bukzor-deadlock-data"
 version = "0.1.0"
-description = "Add your description here"
+description = "Version history of Deadlock's hero builds file"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "keyvalues3>=0.7",
 ]
+
+[project.scripts]
+dlbuilds-validate = "dlbuilds.validate:main"
+
+[build-system]
+requires = ["uv_build>=0.10.2,<0.11"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "dlbuilds"

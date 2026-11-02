@@ -1,6 +1,6 @@
 #!/bin/bash
 # Commit the repo's builds file, labeled with its build counts -- only if it
-# differs from HEAD and passes bin/dlbuilds-validate. Commits no other paths.
+# differs from HEAD and passes dlbuilds-validate. Commits no other paths.
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
@@ -8,7 +8,7 @@ source "$(dirname "$0")/../lib/common.sh"
 if git -C "$REPO" diff --quiet HEAD -- "$BUILDS_REL"; then
   exit 0
 fi
-counts="$("$PY" "$REPO/bin/dlbuilds-validate" "$BUILDS")" || {
+counts="$(dlbuilds-validate "$BUILDS")" || {
   log "refusing (gate failed): $counts"
   exit 1
 }

@@ -1,0 +1,10 @@
+#!/bin/bash
+# dlbuilds-restore the builds file as of git REF (e.g. HEAD~3, a snapshot sha).
+set -euo pipefail
+# shellcheck source=../lib/common.sh
+source "$(dirname "$0")/../lib/common.sh"
+
+src="$(mktemp)"
+trap 'rm "$src"' EXIT
+git -C "$REPO" show "${1:?usage: dlbuilds-restore-ref REF}:$BUILDS_REL" >"$src"
+dlbuilds-restore "$src"

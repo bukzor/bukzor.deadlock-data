@@ -1,7 +1,7 @@
 #!/bin/bash
-# Live save -> repo copy, via the bin/dlbuilds-cp gate. Does not commit.
+# Live save -> repo copy, via the dlbuilds-cp gate. Does not commit.
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
 
-exec "$REPO/bin/dlbuilds-cp" "$LIVE" "$BUILDS"
+exec dlbuilds-cp "$LIVE" "$BUILDS"

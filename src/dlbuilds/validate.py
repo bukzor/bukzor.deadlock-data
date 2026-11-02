@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Validate a Deadlock cached_hero_builds.kv3 file.
 
 Prints "up=N fav=M" and exits 0 when the file parses as KV3 and holds at least
@@ -14,7 +13,8 @@ from typing import Any, cast
 import keyvalues3 as kv3
 
 
-def main(path: str) -> int:
+def main() -> int:
+    (path,) = sys.argv[1:]
     try:
         v = kv3.read(path)
     except Exception as e:
@@ -28,7 +28,3 @@ def main(path: str) -> int:
         return 2
     print(f"up={up} fav={fav}")
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main(sys.argv[1]))

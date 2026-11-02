@@ -6,14 +6,15 @@ export DEBUG="${DEBUG:-0}"
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILDS_REL=cached_hero_builds.kv3
 BUILDS="$REPO/$BUILDS_REL"
-LIVE="/mnt/c/Program Files (x86)/Steam/userdata/37093539/1422450/remote/cfg/cached_hero_builds.kv3"
-PY="$REPO/.venv/bin/python"
+LIVE="${DLBUILDS_LIVE:-/mnt/c/Program Files (x86)/Steam/userdata/37093539/1422450/remote/cfg/cached_hero_builds.kv3}"
+# Steps call each other by name; `uv sync` installs dlbuilds-validate to .venv/bin.
+PATH="$REPO/bin:$REPO/.venv/bin:$PATH"
 
 log() { printf '%s %s: %s\n' "$(date -Is)" "${0##*/}" "$*" >&2; }
 
 onerror() {
   error="$?"
-  log "ERROR($error)"
+  log "ERROR($error): $BASH_COMMAND"
   exit "$error"
 }
 trap onerror ERR
