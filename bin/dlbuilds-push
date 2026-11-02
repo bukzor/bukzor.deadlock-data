@@ -1,11 +1,12 @@
 #!/bin/bash
-# Push to upstream, only when ahead of it: cheap to run every pass, and a failed
-# push is retried next pass. No branch/upstream fails loudly.
+# Rebase onto upstream, then push. Idempotent; a failed push is retried next
+# pass. On conflict, local commits win (-X theirs; with .gitattributes -merge,
+# the whole builds file, never a hunk-by-hunk mix). Remote versions stay in
+# history.
 set -euo pipefail
 # shellcheck source=../lib/common.sh
 source "$(dirname "$0")/../lib/common.sh"
 
-if [[ "$(git -C "$REPO" rev-list --count '@{upstream}..HEAD')" != 0 ]]; then
-  GIT_SSH_COMMAND="ssh -o BatchMode=yes" git -C "$REPO" push -q
-  log "pushed"
-fi
+export GIT_SSH_COMMAND="ssh -o BatchMode=yes"
+git -C "$REPO" pull -q --rebase --autostash -X theirs
+git -C "$REPO" push -q

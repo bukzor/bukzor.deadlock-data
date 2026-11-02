@@ -1,0 +1,2 @@
+# Builds snapshots are whole-file states: never merge two textually.
+cached_hero_builds.kv3 -merge

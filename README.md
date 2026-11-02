@@ -16,7 +16,7 @@ Each is standalone; run any of them by hand (`.envrc` puts `bin/` on PATH).
 | `dlbuilds-cp SRC DST`       | copy SRC over DST, if SRC is valid and they differ    |
 | `dlbuilds-capture`          | `dlbuilds-cp` live save -> repo copy                  |
 | `dlbuilds-commit`           | commit the repo copy, if valid and changed            |
-| `dlbuilds-push`             | push, if ahead of upstream                            |
+| `dlbuilds-push`             | pull --rebase (local wins conflicts), then push       |
 | `dlbuilds-snapshot`         | capture + commit + push                               |
 | `dlbuilds-restore [REF]`    | if game is stopped: `dlbuilds-cp` repo copy (or version at REF) -> live save, then touch it |
 
